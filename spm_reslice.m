@@ -108,7 +108,7 @@ else,
 end;
 
 if flags.which == 0 & isfield(flags,'fudge'), flags = rmfield(flags,'fudge'); end;
-if ~finite(flags.hold) | ~isfield(flags,'fudge'),
+if ~isfinite(flags.hold) | ~isfield(flags,'fudge'),
 	if isfield(flags,'fudge'), warning('No adjustment will be done'); end;
 	if iscell(P), P = cat(1,P{:}); end;
 	reslice_images_volbyvol(P,flags);
@@ -166,7 +166,7 @@ function reslice_images_volbyvol(P,flags)
 %             subdirectory with the same filename but prefixed with an 'r'.
 %             They are all aligned with the first.
 
-if ~finite(flags.hold), % Use Fourier method
+if ~isfinite(flags.hold), % Use Fourier method
 	% Check for non-rigid transformations in the matrixes
 	for i=1:prod(size(P)),
 		pp = P(1).mat\P(i).mat;
@@ -229,7 +229,7 @@ for i = 1:prod(size(P)),
 		PO(i).mat     = P(1).mat;
 		PO(i).descrip = 'spm - realigned';
 
-		if ~finite(flags.hold),
+		if ~isfinite(flags.hold),
 			v = abs(kspace3d(loadvol(P(i)),P(1).mat\P(i).mat));
 			for x3 = 1:P(1).dim(3),
 				if flags.mean,

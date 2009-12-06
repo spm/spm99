@@ -78,7 +78,7 @@ clear global SPM_PLATFORM
 case 'bigend'                      %-Return endian for this architecture
 %=======================================================================
 varargout = {SPM_PLATFORM.bigend};
-if ~finite(SPM_PLATFORM.bigend),
+if ~isfinite(SPM_PLATFORM.bigend),
 	if isnan(SPM_PLATFORM.bigend)
 		error(['I don''t know if "',computer,'" is big-endian.'])
 	else

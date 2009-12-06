@@ -21,7 +21,7 @@ for i=1:size(computers,1),
 		break;
 	end;
 end;
-if ~finite(bend),
+if ~isfinite(bend),
 	if isnan(bend),  
 		error(['I don''t know if "' c '" is big-endian.']);
 	else,

@@ -381,7 +381,7 @@ TabLin     = 1;					%-Table data line
 %-Local maxima p-values & statistics
 %-----------------------------------------------------------------------
 HlistXYZ = [];
-while prod(size(find(finite(Z))))
+while prod(size(find(isfinite(Z))))
 
 	% Paginate if necessary
 	%---------------------------------------------------------------
