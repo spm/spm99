@@ -1,0 +1,393 @@
+  ___  ____  __  __
+ / __)(  _ \(  \/  )  
+ \__ \ )___/ )    (   Statistical Parametric Mapping
+ (___/(__)  (_/\/\_)  SPM99 : Updates
+
+________________________________________________________________________
+spm99_mexsg64.tar.gz   22/10/2000
+------------------------------------------------------------------------
+
+Compilation of mex files for 64 bit SGI machines by Geriant Rees
+<geraint@klab.caltech.edu>
+
+________________________________________________________________________
+spm_vol_ecat7.m 2.7 00/01/26
+------------------------------------------------------------------------
+Calibration factor from main hdr is now included in the scalefactor
+field of the volume handles. This problem was reported by Steven Grant
+<sgrant@nida.nih.gov>.
+
+spm_vol_ecat7.m only used a single scale factor (SCALE_FACTOR) from
+the ECAT subheader.  This works fine if and only if the images are
+uncalibrated (which they are at the FIL).  If the images are expressed
+in specific calibration units (e.g. Bq/cc), then one needs to
+incorporate a second factor found in the main header
+(mh.ECAT_CALIBRATION_FACTOR).  The product of Scale_Factor and
+ECAT_CALIBRATION_FACTOR then gives the proper units.
+
+-JA
+________________________________________________________________________
+spm_orthviews.m 2.18 00/02/04
+------------------------------------------------------------------------
+Small bug in display of images.  The first row/column was not being
+displayed, although the crosshairs were in the correct positions.
+This was noticed by JBP just before the SPM99 release, but there was
+no chance to fix it.
+-JA
+
+________________________________________________________________________
+spm_sn3d.m 2.27 00/02/07
+------------------------------------------------------------------------
+There is a tiny little bug in batching in spm_sn3d.m that was found by
+Matthew Brett.  Line 444... should read:
+
+iterations = spm_input('# Nonlinear Iterations?','+1','m',...
+	['1  nonlinear iteration |3  nonlinear iterations|' ...
+	 '5  nonlinear iterations|8  nonlinear iterations|' ...
+	 '12 nonlinear iterations|16 nonlinear iterations'],...
+	 tmp2, tmp,'batch',{},'nonlin_ite_nb');
+-JA
+
+________________________________________________________________________
+spm_segment.m    2.12 00/02/10
+spm_coregister.m 2.10 00/02/10
+------------------------------------------------------------------------
+Routines modified so that they don't need Graphical displays. This
+should allow them to run in batch mode.
+-JA
+
+________________________________________________________________________
+spm_transverse.m 2.16 00/02/21
+spm_mip.m        2.6  00/02/21
+spm_mip_ui.m     2.12 00/02/21
+------------------------------------------------------------------------
+Routines patched so that they work properly for 2D data.  The originals
+hadn't been tested.
+-JA
+
+________________________________________________________________________
+spm_platform.m  2.8 00/02/22
+------------------------------------------------------------------------
+Matthew Brett's suggestion from 22/02/00:
+Alternatively, perhaps it would be better to replace lines 111-126 with:
+	twd = tempdir;
+-JA
+
+________________________________________________________________________
+spm_hwrite.m   2.3 00/02/22
+------------------------------------------------------------------------
+"spm_hwrite.m" did not like filenames containing spaces, which should
+be perfectly commonplace on PCs.  Joseph Dien found this one.
+-JA
+
+________________________________________________________________________
+spm_coregister.m 2.11 00/02/23
+------------------------------------------------------------------------
+Numerical instability and underflow problems (which were not causing
+warning messages or errors as a matrix pseudo-inverse is used rather
+than a proper inverse at line 362 of spm_affsub3.m) solved by modifying
+spm_coregister.m at around line 209 so that all the images are scaled
+to have roughly the same global intensity.
+-JA
+________________________________________________________________________
+spm_P.m 2.5 00/03/06
+------------------------------------------------------------------------
+Tom Nichols found an incredibly tiny bug/typo in spm_P.m on line 151:
+	c       = (1+t^2/v)^((1-v)/2);
+if t is a vector (you pass a vector of statistics to get p-values)
+the "t^2" dies with "Matrix must be square".
+-JA
+________________________________________________________________________
+spm_slice_timing.m 2.7 00/03/16
+------------------------------------------------------------------------
+According to Matthew Brett:
+	assuming there is no gap between the end of the
+	collection of the last slice, and the beginning
+	of the collection of the first slice of the next
+	volume, the TA should be specified as
+		TA = TR - TR/n
+
+Code modified by Michael Erb:
+ line 155: new default value for TA
+   old   TA = spm_input('Acquisition Time (TA) {secs}','!+1','e',TR);
+   new   TA = spm_input('Acquisition Time (TA) {secs}','!+1','e',TR-TR/nslices);
+ line 178: Problem with batch (nargin >= 1)
+   old         eval(['P    =    P' num2str(subj) ';']);
+   new         if nsubjects > 1, eval(['P    =    P' num2str(subj) ';']); end;
+-JA
+________________________________________________________________________
+render.ZIP
+------------------------------------------------------------------------
+Sargo Aalto found that the problem often encountered under NT when
+loading the render_*.mat files during the Render Display, may have been
+due to a problem with Winzip. Matthew Brett suggested that a .zip file
+may be useful.  Alternatively, people could dearchive using EasyZip,
+which is free from http://www.bamsystems.com/easyzip/ , or pkzip which
+is shareware from http://www.pkware.com, or use the GNU tar utility that
+is part of the Cygwin project (http://sourceware.cygnus.com/cygwin).
+The binary and necessary DLL files are available from Matthew's webspace:
+	http://www.mrc-cbu.cam.ac.uk/~matthew.brett/ftp/Win_spm99
+Download tar.exe and cygwin1.dll into your path, and, from the Windows DOS
+prompt, extract the spm99.tgz file with:
+	tar -zxf spm99.tgz
+-JA
+________________________________________________________________________
+spm_sn3d.m 2.28
+------------------------------------------------------------------------
+Fixed problem reported by Darren Gitelman, in addition to same problem
+with bounding box:
+| A problem arises in spm_sn3d if one sets the spm global sptl_Vx to 
+| empty or 0 OR if one goes into spm_defaults and defines the output 
+| voxel sizes to be a runtime option which also sets sptl_Vx to be 0.
+| 
+| If one then performs a normalization and "Determines Parameters 
+| Only," spm_sn3d fails at line 830
+| 
+| spm_write_sn(P(:,1),matname,bb,Vox,1);
+| 
+| because Vox is defined to be 0.
+| 
+| spm_sn3d only asks the user to define the voxel size (as a runtime 
+| option) if  either the option write normalized or determine 
+| parameters and write normalized were selected. This is because 
+| writing out a quick t1 (or object brain) normalization is now a 
+| default.
+-JA
+________________________________________________________________________
+spm_read_vols.m 2.5 00/03/21
+------------------------------------------------------------------------
+Fixed a couple of bugs that Matthew Brett found:
+Lines 42, 43 were:
+	im = logical(zeros(ni,1));
+	for i=1:n, im(i)=~spm_type(Vi(i).dim(4),'NaNrep'); end
+but are now:
+	im = logical(zeros(n,1));
+	for i=1:n, im(i)=~spm_type(V(i).dim(4),'NaNrep'); end
+-JA
+________________________________________________________________________
+spm_help.m 2.43 00/03/23
+------------------------------------------------------------------------
+Fixed problem pointed out by Jan Kremlacek:
+Printing the help to PS, was printed in the BBox bigger than A4 format
+even when there is no problem with printing of any results.
+-JA
+________________________________________________________________________
+spm_coreg_ui.m  2.2 00/03/24
+------------------------------------------------------------------------
+Martin Stumpf noticed a problem with the batch mode version, in that
+line 166 has "PFF" for its lvalue rather than "others".
+It has now been fixed.
+-JA
+________________________________________________________________________
+spm_get_space.m    2.5  00/03/30
+spm_sn3d.m         2.29 00/03/30
+spm_bch_bchmat.m   2.7  00/03/30
+spm_bch_headers.m  2.6  00/03/30
+------------------------------------------------------------------------
+A recommendation by Matthew Brett (that he just beat me in finding):
+
+Files modified to save as:
+	save('x','y','z');
+rather than:
+	save x y z
+This is because of problems (particularly under Windows) with filenames
+and directory paths containing spaces.
+-JA
+________________________________________________________________________
+spm_bch_bchmat.m 2.8 00/05/17
+------------------------------------------------------------------------
+Bug in version 2.7 found by Petr Janata. The line saying:
+	save(spm_str_manip(bch_mfile,'rp'), str)           
+was not working since "str" was a string of variable names with
+spaces between.
+-JA
+________________________________________________________________________
+spm_list.m       2.31 00/05/25
+spm_orthviews.m  2.20 00/05/25
+spm_render.m     2.17 00/05/25
+spm_transverse.m 2.17 00/05/25
+------------------------------------------------------------------------
+Problems with negative t values (from conjunction analyses). These were
+reported and largely fixed by Darren Gitelman.
+-JA
+________________________________________________________________________
+spm_list_files.c 2.8 00/07/06
+------------------------------------------------------------------------
+The fix by Volkmar Glauche that resolves the problem with file
+permissions under Linux (files get only displayed in spm_get when they
+are world-readable). The reason is at line 28 of the original code
+(spm_list_files.c)
+
+ 	if (uid == -1)
+
+This returns 0 at all times, since under Linux uid is of type unsigned int
+and cannot be negative. Replacing this line with the code
+
+ 	if (uid == (uid_t)-1)
+
+works with Linux and should not change behaviour on other systems.
+-JA
+________________________________________________________________________
+spm_orthviews.m 2.22 00/07/21
+------------------------------------------------------------------------
+Included some modifications by Matthew Brett that are to do with
+displaying coloured images.  The main reason for inclusion here is
+because of the fix for the problem reported by Steve Fromm:
+
+| I don't understand the following behavior:
+| 1.  Display the epi.img template, using World Space.  [Say that image
+| displayed in Position A]
+| 2.  Set yaw = pi/6; image rotates [Position B]
+| 3.  Switch to voxel space (leaving yaw set at pi/6); image rotates back to
+| the initial position [Position A]
+| 4.  Set yaw = 0; image rotates. [Position C; opposite direction, in the
+| axial plane]
+| 5.  Return to World Space; image rotates back to Position A.
+| 6.  Back to Voxel Space; image still in Position A.
+
+What was happening was that any reorienting is undone in the display
+when you switch from World->Voxel spaces.
+-JA
+________________________________________________________________________
+spm_sn3d.m 2.30 00/08/07
+------------------------------------------------------------------------
+Matthew Brett found a truly miniscule bug in spm_sn3d.m.
+Line 352 of spm_sn3d.m is missing a quote:
+subj(i).objmask = spm_input('batch', {},objmask',i);
+should be:
+subj(i).objmask = spm_input('batch', {},'objmask',i);
+-JA
+________________________________________________________________________
+spm_graph.m 2.29 00/09/14
+------------------------------------------------------------------------
+Minor bug in spm_graph.m, affecting plots of event-related fitted
+response with PSTH (with no session average). It was found and fixed
+by Jorge Armony (ucjtnga@ucl.ac.uk) who replaced line 418
+	Y     = Y*ones(length(ss))/length(ss);
+with
+	Y     = sum(Y,2)/length(ss);
+-JA
+________________________________________________________________________
+spm_transverse.m 2.18 00/10/13
+------------------------------------------------------------------------
+Minor bug in displaying the titles - discovered by Michele Piana.
+The z=?? part for the planes above and below were determined based on
+the assumption that the images had been spatially normalised.
+-JA
+________________________________________________________________________
+spm_platform.m  2.10 00/11/08
+------------------------------------------------------------------------
+Modified (by Volkmar Glauche) to include "GLNX86", which is what Matlab6
+reports as the computer platform on Linux boxes
+(see spm99_mexglx.tar.gz).
+-JA
+________________________________________________________________________
+spm99_mexglx.tar.gz 00/11/09
+------------------------------------------------------------------------
+Compilation of mex files for Linux machines for running under Matlab 6.
+Files compiled by Volkmar Glauche (see spm_platform.m  2.10).
+-JA
+________________________________________________________________________
+spm_regions.m 2.7	00/11/09
+spm_filter.m 2.5 	00/11/09
+spm_dcm_display.m 2.1	00/11/09
+------------------------------------------------------------------------
+spm_regions.m 2.7 allows to extract VOI time-series of adjusted data,
+where the VOI can be a sphere, cuboid or a suprathreshold cluster. 
+spm_filter 2.5 and spm_dcm_display 2.1 are needed to make spm_regions 2.7
+work properly. 
+________________________________________________________________________
+spm_bch.m        2.8 01/01/29
+spm_bch_bchmat.m 2.11 01/01/30
+------------------------------------------------------------------------
+An assortment of small bug fixes by Darren Gitelman:
+* Line 137 of spm_bch.m  should have semicolon at the end of the line.
+  index = spm_input('batch',{},'index');
+
+* When one tries to batch defaults_edit the error is in line 165 of 
+  spm_bch_bchmat.m
+    if exist(bch_names{i})
+  exist(bchnames{i}) happens to be true for the bch_name of reset because 
+  there is a function reset in toolbox\matlab\graphics\reset.m 
+
+* In spm_bch for the first or second line should include 
+  lasterr('');
+  this resets the lasterr to null so it doesn't confuse any of the
+  try..catch subroutines.
+ 
+* In spm_bch, last line should be clear global BCH. This is so that one 
+  could then continue to work in spm normally. If there is a BCH variable 
+  then things like dialog boxes don't always show up.
+-JA
+________________________________________________________________________
+spm_mask.m 2.8 01/02/09
+------------------------------------------------------------------------
+The released version of this function did not work at all (problem
+found by Jerry Allison and Emma Burton):
+??? Error using ==> run
+Undefined function or variable 'p'.
+
+??? Error in ==> /export/home1/seanc/spm99/spm.m
+On line 1180  ==> evalin('base',CBs{v-1})
+
+This has been fixed (I think).
+-JA
+________________________________________________________________________
+spm_get.m 2.39 01/02/27
+------------------------------------------------------------------------
+Included Tom Nichol's fix:
+| > I don't know of a good fix... maybe
+| > 	
+| > 	     'String', cellstr(char(get(findobj(F,'Tag','P'),'UserData')))
+| 
+| Yup, that fixes it.
+________________________________________________________________________
+spm_write_plane.m 2.10 00/09/04
+------------------------------------------------------------------------
+Fixed so that it can be passed data that is not just double precision
+floating point.
+-JA
+________________________________________________________________________
+spm_hist2.c 2.3 01/03/09
+------------------------------------------------------------------------
+Changed it the way the interpolatio is done so that the MI cost
+function is less "saw toothed".  Previously, sampling at voxel centres
+resulted in higher mutual information than sampling between voxels.
+
+What was happening was that when a point was sampled between the
+centres of a group of 8 voxels, a small amount was added to the bins
+of the histograms corresponding to the intensity of the 8 neighbours.
+The amount added was related to the distance from the point to the
+voxel.  When sampling an equal distance from all the points, 1/8 was
+added to all the relevent bins.  When sampling exactly at the centre
+of a voxel, then 1 was added to the bin for that voxel.  The effect
+that this had was that the mutual information cost function was
+related to the amount of interpolation done.  When all points were
+sampled at the voxel centres, the mutual information was higher
+because the histograms were more spikey.  The whole thing resulted in
+lots of local minima at positions where there was less interpolation.
+It is particularly bad when the images have relatively large voxels.
+
+-JA
+________________________________________________________________________
+spm_vol_ecat7.m 2.9 01/03/15
+spm_vol_minc.m  2.9 01/03/15
+------------------------------------------------------------------------
+Patched them up for use in Matlab 6. In Matlab5, the following would
+work:
+	a = struct('b',[]);
+	a.b(1)=struct('c','d');
+In Matlab 6, the same has to be done something like:
+	a = struct('b',[]);
+	a.b(1).c = [];
+
+-JA
+________________________________________________________________________
+spm_grid.m 2.1 01/03/15
+------------------------------------------------------------------------
+This is a wierd Matlab 6 problem, that appears something to do with
+functions that load .mat files, without specifying the names of the
+variables to load.
+-JA
+________________________________________________________________________
+------------------------------------------------------------------------
