@@ -617,7 +617,7 @@ end;
 %-----------------------------------------------------------------------
 if nargout>=4,
 	W      = (2*dch2/chi2).^(-.5).*vx;
-	msk    = find(~isfinite(W));
+	msk    = find(~finite(W));
 	W      = min([W;minW]);
 	W(msk) = 1;
 	skips  = [skipx skipy skipz].*vx;		% sample distances (mm)

@@ -72,7 +72,7 @@ typstr = spm_type(typ);
 
 % Determine scalefactors etc where necessary
 range  = [spm_type(typ,'minval') spm_type(typ,'maxval')];
-if all(isfinite(range)),
+if all(finite(range)),
 	mx     = max(data,[],1);
 	mn     = min(data,[],1);
 	scale  = (mx-mn)/(range(2)-range(1));

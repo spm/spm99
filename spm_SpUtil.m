@@ -344,16 +344,16 @@ case {0,1}
    end
 
 case 2
-   if ~isempty(double(c)) & any(any(double(c)))         %- not empty and not null
+   if ~isempty(c) & any(any(c))         %- not empty and not null
       if cukFlag,
-         varargout = {	...
-	    spm_sp('cukxp-:',sX,double(c)), ...				%- X1o
-	    spm_sp('cukx',sX,spm_sp('r',spm_sp('set',double(c)))) };    %- X0
+         varargout = {	
+	    spm_sp('cukxp-:',sX,c), ...				%- X1o
+	    spm_sp('cukx',sX,spm_sp('r',spm_sp('set',c))) };    %- X0
       else
          varargout = {	
-	    spm_sp(':',sX, spm_sp('xp-:',sX,double(c))), ...            %- X1o
+	    spm_sp(':',sX, spm_sp('xp-:',sX,c)), ...            %- X1o
 	    spm_sp(':',sX, ...
-               spm_sp('x',sX)*spm_sp('r',spm_sp('set',double(c)))) };   %- X0
+               spm_sp('x',sX)*spm_sp('r',spm_sp('set',c))) };   %- X0
       end
    else            
       if isempty(c),                    %- empty

@@ -78,7 +78,7 @@ clear global SPM_PLATFORM
 case 'bigend'                      %-Return endian for this architecture
 %=======================================================================
 varargout = {SPM_PLATFORM.bigend};
-if ~isfinite(SPM_PLATFORM.bigend),
+if ~finite(SPM_PLATFORM.bigend),
 	if isnan(SPM_PLATFORM.bigend)
 		error(['I don''t know if "',computer,'" is big-endian.'])
 	else
@@ -152,7 +152,6 @@ global SPM_PLATFORM
 %-Platform definitions
 %-----------------------------------------------------------------------
 PDefs = {	'PCWIN',	'win',	0;...
-		'PCWIN64',	'win',	0;...
 		'MAC2',		'mac',	1;...
 		'SUN4',		'unx',	1;...
 		'SOL2',		'unx',	1;...
@@ -165,7 +164,6 @@ PDefs = {	'PCWIN',	'win',	0;...
 		'AXP_VMSIEEE',	'vms',	0;...
 		'LNX86',	'unx',	0;...
 		'GLNX86',	'unx',  0;...
-		'GLNXA64',	'unx',  0;...
 		'VAX_VMSG',	'vms',	Inf;...
 		'VAX_VMSD',	'vms',	Inf	};
 
@@ -224,12 +222,12 @@ case {'SOL2'}	%-Some Sol2 platforms give segmentation violations with Helvetica
 	SPM_PLATFORM.font.times     = 'Times';
 	SPM_PLATFORM.font.courier   = 'Courier';
 	SPM_PLATFORM.font.symbol    = 'Symbol';
-case {'SUN4','SOL2','HP700','SGI','SGI64','IBM_RS','ALPHA','LNX86','GLNX86','GLNXA64'}
+case {'SUN4','SOL2','HP700','SGI','SGI64','IBM_RS','ALPHA','LNX86','GLNX86'}
 	SPM_PLATFORM.font.helvetica = 'Helvetica';
 	SPM_PLATFORM.font.times     = 'Times';
 	SPM_PLATFORM.font.courier   = 'Courier';
 	SPM_PLATFORM.font.symbol    = 'Symbol';
-case {'PCWIN','PCWIN64'}
+case {'PCWIN'}
 	SPM_PLATFORM.font.helvetica = 'Arial Narrow';
 	SPM_PLATFORM.font.times     = 'Times New Roman';
 	SPM_PLATFORM.font.courier   = 'Courier New';

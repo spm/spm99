@@ -350,7 +350,7 @@ floating point.
 ________________________________________________________________________
 spm_hist2.c 2.3 01/03/09
 ------------------------------------------------------------------------
-Changed it the way the interpolation is done so that the MI cost
+Changed it the way the interpolatio is done so that the MI cost
 function is less "saw toothed".  Previously, sampling at voxel centres
 resulted in higher mutual information than sampling between voxels.
 
@@ -385,7 +385,7 @@ In Matlab 6, the same has to be done something like:
 ________________________________________________________________________
 spm_grid.m 2.1 01/03/15
 ------------------------------------------------------------------------
-This is a weird Matlab 6 problem, that appears something to do with
+This is a wierd Matlab 6 problem, that appears something to do with
 functions that load .mat files, without specifying the names of the
 variables to load.
 -JA

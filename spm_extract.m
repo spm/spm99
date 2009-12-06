@@ -36,7 +36,7 @@ if nargin<2,
 else,
 	% Return the data itself.
 	len    = ceil(dim(1)*bits/64)/8*64;
-	if prod(size(index))==1 & ~isfinite(index(1)),
+	if prod(size(index))==1 & ~finite(index(1)),
 		data = zeros(dim(1),dim(2));
 		for i=1:dim(2),
 			my_fseek(fp,hdrlen + (len + 2*8)*(i-1),'bof');

@@ -73,10 +73,10 @@ for j=1:dim(3),
 			if (dt==2) | (dt==4) | (dt==8) | (dt==512) | (dt==1024) | (dt==2048), 
 				msk = msk + img~=0;
 			else,
-				msk = msk + isfinite(img);
+				msk = msk + finite(img);
 			end;
 		else,
-			msk = msk + (img>=thresh & isfinite(img));
+			msk = msk + (img>=thresh & finite(img));
 		end;
 	end;
 

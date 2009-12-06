@@ -340,7 +340,7 @@ if (nargin == 0)
 				pos = pos + 1;
 			end;
 			if strcmp(MODALITY, 'FMRI'),
-				if isfinite(FlagsR.hold),
+				if finite(FlagsR.hold),
 					if sptl_DjstFMRI == 1,
 						FlagsR.fudge = 1;
 					elseif sptl_DjstFMRI ~= 0,
