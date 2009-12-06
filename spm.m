@@ -463,18 +463,6 @@ set([Fmenu,Finter,Fgraph],'Visible','on')
 fprintf('SPM present working directory:\n\t%s\n',pwd)
 
 
-%-Nag user to upgrade if this is old software
-%-----------------------------------------------------------------------
-if now>datenum('31-Dec-2003')
-	spm('alert!',{	'This software is rather old!',' ',...
-			'SPM99 was released in January 2000,',...
-			'over three years ago!',' ',...
-			'Please upgrade to a more recent release of SPM!',...
-			' ','     http://www.fil.ion.ucl.ac.uk/spm'},...
-		'Old version warning...',[],1)
-end
-
-
 %=======================================================================
 case 'createmenuwin'                              %-Draw SPM menu window
 %=======================================================================
