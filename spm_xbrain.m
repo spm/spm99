@@ -129,10 +129,10 @@ spm_progress_bar('Clear');
 
 % Generate output filename
 %-----------------------------------------------------------------------
-[pth,nam,ext,ver] = fileparts(deblank(P(1,:)));
+[pth,nam,ext] = fileparts(deblank(P(1,:)));
 ind = findstr(nam,'_seg1');
 if ~isempty(ind), nam((0:4)+ind(1))=[]; end;
-fname = fullfile(pth,['brain_' nam ext ver]);
+fname = fullfile(pth,['brain_' nam ext]);
 
 if any(mode==[2 4 6 7]),
 	% Produce rendering

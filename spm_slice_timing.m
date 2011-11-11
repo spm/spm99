@@ -189,8 +189,8 @@ for subj = 1:nsubjects
 % create new header files
 Vout 	= Vin;
 for k=1:nimgo,
-	[pth,nm,xt,vr] = fileparts(deblank(Vin(k).fname));
-	Vout(k).fname  = fullfile(pth,['a' nm xt vr]);
+	[pth,nm,xt]   = fileparts(deblank(Vin(k).fname));
+	Vout(k).fname = fullfile(pth,['a' nm xt]);
 	if isfield(Vout(k),'descrip'),
 		desc = [Vout(k).descrip ' '];
 	else,

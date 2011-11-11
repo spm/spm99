@@ -825,8 +825,8 @@ if ~isempty(fg),
 	h1 = spm_orthviews('Image',deblank(spms(1,:)),[0.01 0.1 .48 .6]);
 	linfun('Writing Image for Display..');
 	spm_write_sn(P(1,:),matname,bb,Vox,1);
-	[pth,nm,xt,vr] = fileparts(deblank(P(1,:)));
-	q              = fullfile(pth,['n' nm xt vr]);
+	[pth,nm,xt] = fileparts(deblank(P(1,:)));
+	q           = fullfile(pth,['n' nm xt]);
 	h2 = spm_orthviews('Image',q,[.51 0.1 .48 .6]);
 	spm_orthviews('Space',h2);
 	spm_print;

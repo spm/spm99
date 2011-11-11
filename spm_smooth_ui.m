@@ -56,8 +56,8 @@ spm('FigName','Smooth: working',Finter,CmdLine);
 spm_progress_bar('Init',n,'Smoothing','Volumes Complete');
 for i = 1:n
 	Q = deblank(P(i,:));
-	[pth,nm,xt,vr] = fileparts(deblank(Q));
-	U = fullfile(pth,['s' nm xt vr]);
+	[pth,nm,xt] = fileparts(deblank(Q));
+	U = fullfile(pth,['s' nm xt]);
 	spm_smooth(Q,U,s);
 	spm_progress_bar('Set',i);
 end
